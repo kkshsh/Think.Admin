@@ -161,6 +161,8 @@ return [
         'level'       => ['error', 'log', 'info', 'sql', 'notice', 'alert', 'debug'],
         // error和sql日志单独记录
         'apart_level' => ['error', 'sql'],
+		
+		'file_size'     =>2097152*100,
     ],
     // +----------------------------------------------------------------------
     // | Trace设置 开启 app_trace 后 有效

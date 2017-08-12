@@ -53,9 +53,10 @@ class Node extends BasicAdmin
         if ($this->request->isPost()) {
             $post = $this->request->post();
             if (isset($post['name']) && isset($post['value'])) {
+				
                 $nameattr = explode('.', $post['name']);
                 $field = array_shift($nameattr);
-                $data = ['node' => join(',', $nameattr), $field => $post['value']];
+                $data = ['node' => join('.', $nameattr), $field => $post['value']];
                 DataService::save($this->table, $data, 'node');
                 $this->success('参数保存成功！', '');
             }

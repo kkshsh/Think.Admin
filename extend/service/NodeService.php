@@ -87,15 +87,25 @@ class NodeService
     public static function get()
     {
         $alias = [];
+		
         foreach (Db::name('SystemNode')->select() as $vo) {
+			
             $alias["{$vo['node']}"] = $vo;
+			
         }
+		
         $nodes = [];
+		
         $ignore = [
             'index',
-            'wechat/api', 'wechat/notify', 'wechat/review',
-            'admin/plugs', 'admin/login', 'admin/index',
+            'wechat/api',
+			'wechat/notify',
+			'wechat/review',
+            'admin/plugs',
+			'admin/login',
+			'admin/index',
         ];
+		
         foreach (self::getNodeTree(APP_PATH) as $thr) {
             foreach ($ignore as $str) {
                 if (stripos($thr, $str) === 0) {
@@ -121,16 +131,37 @@ class NodeService
     public static function getNodeTree($path, $nodes = [])
     {
         foreach (self::_getFilePaths($path) as $vo) {
-            if (!preg_match('|/(\w+)/controller/(\w+)|', str_replace(DS, '/', $vo), $matches) || count($matches) !== 3) {
+			
+            if (!preg_match('|/(\w+)/controller/(.*?/)*(\w+)|', str_replace(DS, '/', $vo), $matches) || count($matches) !== 4) {
+				
                 continue;
+				
             }
+			
             $className = config('app_namespace') . str_replace('/', '\\', $matches[0]);
+			
             if (!class_exists($className)) {
+				
                 continue;
+				
             }
+			
             foreach (get_class_methods($className) as $actionName) {
+				
                 if ($actionName[0] !== '_') {
-                    $nodes[] = strtolower("{$matches[1]}/{$matches[2]}/{$actionName}");
+					
+					if($matches[2]){
+						
+						$path2 = str_replace('/','.',$matches[2]);
+						
+						$nodes[] = strtolower("{$matches[1]}/{$path2}{$matches[3]}/{$actionName}");
+						
+					}else{
+						
+						$nodes[] = strtolower("{$matches[1]}/{$matches[3]}/{$actionName}");
+						
+					}
+                    
                 }
             }
         }
