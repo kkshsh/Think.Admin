@@ -1,0 +1,46 @@
+{extend name="extra@admin/content"}
+
+{block name="content"}
+<form onsubmit="return false;" action="{:url("$classuri/run")}" data-auto="true" method="post" class='form-horizontal' style='padding-top:20px'>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">采集地址</label>
+        <div class='col-sm-8'>
+            <input type="text" name="url" required="required" title="请输入采集网址" placeholder="请输入采集网址" value="{$data.url|default=''}" class="layui-input">
+            <p class="help-block">如：http://list.iqiyi.com/www/1/-------------11-2-1-iqiyi--.html 列表则从url当前页开始翻页</p>
+        </div>
+    </div>
+	
+	<div class="form-group">
+        <label class="col-sm-2 control-label">分类id</label>
+        <div class='col-sm-8'>
+            <input type="text" name="cid" required="required" title="请输入分类id" placeholder="请输入分类id" value="{$data.cid|default=''}" class="layui-input">
+            <p class="help-block">分类的id</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">采集到第几页</label>
+        <div class='col-sm-8'>
+            <input type="text" name="max_page" maxlength="32" title="请输入采集到第几页" placeholder="请输入采集到第几页" value="{$data.max_page|default=''}" class="layui-input">
+            <p class="help-block">1.“采集到第几页” 仅列表有效，默认是采集到第2页<!--，如果采集地址只有5页，填写采集到13页 会自动检测 自动停止采集--></p>
+			<p class="help-block">2.同时采集数量过多可能会被iqiyi限制访问，造成采集失败。建议电视剧最多一次采集2页，电影最多一次采集10页</p>
+			<p class="help-block">3.重复采集会出现很多重复的内容，可以先删除再采集</p>
+			<p class="help-block">4.如果采集地址是第2页的地址 填写采集到第3页 则采集第2，3页，如果采集地址是第4页的地址 填写采集到第3页 则只采集第4页这一页</p>
+			<p class="help-block">5.电视剧列表采集的电视剧会自动在分类id下建立子分类，视频归属对应子分类下</p>
+			
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="col-sm-4 col-sm-offset-2">
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">开始采集</button>
+			<p class="help-block">请勿重复点击！！！</p>
+        </div>
+    </div>
+
+</form>
+
+{/block}

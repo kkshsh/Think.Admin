@@ -23,6 +23,7 @@ require.config({
     map: {'*': {css: baseUrl + '../plugs/require/require.css.js'}},
     paths: {
         // 自定义插件（源码自创建或已修改源码）
+		'bootstrap.collapse': ['../plugs/bootstrap/js/bootstrap-collapse'],
         'admin.plugs': ['plugs'],
         'admin.listen': ['listen'],
         'layui': ['../plugs/layui/layui'],
@@ -56,6 +57,7 @@ require.config({
         'jquery.masonry': {deps: ['jquery']},
         'admin.plugs': {deps: ['jquery', 'layui']},
         'bootstrap.typeahead': {deps: ['jquery', 'bootstrap']},
+		'bootstrap.collapse': {deps: ['jquery', 'bootstrap']},
         'websocket': {deps: [baseUrl + '../plugs/socket/swfobject.min.js']},
         'admin.listen': {deps: ['jquery', 'jquery.cookies', 'admin.plugs']},
         'jquery.ztree': {deps: ['jquery', 'css!' + baseUrl + '../plugs/ztree/zTreeStyle/zTreeStyle.css']},

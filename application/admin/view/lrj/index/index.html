@@ -1,0 +1,186 @@
+{extend name='extra@admin/content'}
+
+{block name="content"}
+		<ul id="treeDemo" class="ztree"></ul>
+
+
+{if auth("$classuri/save")}
+	<style type="text/css">
+.ztree * {font-size: 10pt;font-family:"Microsoft Yahei",Verdana,Simsun,"Segoe UI Web Light","Segoe UI Light","Segoe UI Web Regular","Segoe UI","Segoe UI Symbol","Helvetica Neue",Arial}
+.ztree li ul{ margin:0; padding:0}
+.ztree li {line-height:50px;}
+.ztree li a {width:100%;height:50px;padding-top: 0px;}
+#.ztree li a:hover {text-decoration:none; background-color: #F1ECEC;}
+.ztree li a span.button.switch {visibility:hidden}
+.ztree.showIcon li a span.button.switch {visibility:visible}
+.ztree li a.curSelectedNode {border:0;height:50px;}
+.ztree li span {line-height:50px;}
+.ztree li span.button {margin-top: -7px;}
+.ztree li span.button.switch {width: 16px;height: 16px;}
+
+//.ztree li a.level0 span {font-size: 150%;font-weight: bold;}
+//.ztree li span.button {background-image:url("./left_menuForOutLook.png"); *background-image:url("./left_menuForOutLook.gif")}
+//.ztree li span.button.switch.level0 {width: 20px; height:20px}
+//.ztree li span.button.switch.level1 {width: 20px; height:20px}
+//.ztree li span.button.noline_open {background-position: 0 0;}
+//.ztree li span.button.noline_close {background-position: -18px 0;}
+//.ztree li span.button.noline_open.level0 {background-position: 0 -18px;}
+//.ztree li span.button.noline_close.level0 {background-position: -18px -18px;}
+
+.czcj,.ckzxm {float:right; margin-right:20px;margin-top:20px;}
+a.level0,a.level1,a.level2,a.level3,a.level4{
+	    border-top: 1px solid #ccc;
+}
+
+	</style>
+
+<script>
+
+		var curMenu = null, zTree_Menu = null;
+		
+		var setting = {
+			view: {
+				showLine: false,
+				showIcon: false,
+				selectedMulti: false,
+				dblClickExpand: false,
+				addDiyDom: addDiyDom
+			},
+			data: {
+				simpleData: {
+					enable: true
+				}
+			},
+			callback: {
+				beforeClick: beforeClick
+			}
+		};
+
+		var zNodes = [{foreach $nodeList as $key=>$vo}
+						{ id:{$vo.id}, pId:{$vo.parentid}, name:"{$vo.title}"},
+					{/foreach}];
+					/*
+		[
+			{ id:1, pId:0, name:"文件夹", open:true},
+			{ id:11, pId:1, name:"收件箱"},
+			{ id:111, pId:11, name:"收件箱1"},
+			{ id:112, pId:111, name:"收件箱2"},
+			{ id:113, pId:112, name:"收件箱3"},
+			{ id:114, pId:113, name:"收件箱4"},
+			{ id:12, pId:1, name:"垃圾邮件"},
+			{ id:13, pId:1, name:"草稿"},
+			{ id:14, pId:1, name:"已发送邮件"},
+			{ id:15, pId:1, name:"已删除邮件"},
+			{ id:3, pId:0, name:"快速视图"},
+			{ id:31, pId:3, name:"文档"},
+			{ id:32, pId:3, name:"照片"}
+		];
+*/
+		function addDiyDom(treeId, treeNode) {
+
+			var spaceWidth = 20;
+			var switchObj = $("#" + treeNode.tId + "_switch"),
+			icoObj = $("#" + treeNode.tId + "_ico");
+			switchObj.remove();
+			icoObj.before(switchObj);
+
+			if (treeNode.level > 1) {
+				var spaceStr = "<span style='display: inline-block;width:" + (spaceWidth * treeNode.level)+ "px'></span>";
+				switchObj.before(spaceStr);
+			}
+			
+			
+			
+			
+			
+			
+			
+				var aObj = $("#" + treeNode.tId + "_a");
+				
+				if ($("#diyBtn_a_"+treeNode.id).length>0) return;
+				
+				if(!treeNode.children){
+				
+					var editStr = "<span id='diyBtn_space_" +treeNode.id+ "' > </span>"
+				
+					+ "<button  type='button' class='ckzxm btn btn-info' href='' id='diyBtn_a_" + treeNode.id
+						
+					+ "' title='"+treeNode.name+"' onfocus='this.blur();'>查看子项目</button>";
+						
+					aObj.append(editStr);
+					
+					var btn = $("#diyBtn_a_"+treeNode.id);
+					
+					if (btn) btn.bind("click", function(){alert("diy Button for " + treeNode.name);});
+				
+				}
+				
+				if ($("#diyBtn_b_"+treeNode.id).length>0) return;
+				
+				if(!treeNode.children){
+				
+					var editStr = "<span id='diyBtn_space_" +treeNode.id+ "' > </span>"
+				
+					+ "<button  type='button' class='czcj btn btn-info' href='' id='diyBtn_b_" + treeNode.id
+						
+					+ "' title='"+treeNode.name+"' onfocus='this.blur();'>查看子项目</button>";
+						
+					aObj.append(editStr);
+					
+					var btn = $("#diyBtn_b_"+treeNode.id);
+					
+					if (btn) btn.bind("click", function(){alert("diy Button for " + treeNode.name);});
+				
+				}
+				
+
+			
+			
+			
+			
+		}
+
+		function beforeClick(treeId, treeNode) {
+			if (treeNode.level == 0 ) {
+				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+				zTree.expandNode(treeNode);
+				return false;
+			}
+			return true;
+		}
+
+	require(['jquery.ztree'], function () {
+        	var treeObj = $("#treeDemo");
+			$.fn.zTree.init(treeObj, setting, zNodes);
+			zTree_Menu = $.fn.zTree.getZTreeObj("treeDemo");
+			
+			treeObj.addClass("showIcon");
+			/*
+			curMenu = zTree_Menu.getNodes()[0].children[0].children[0];
+			zTree_Menu.selectNode(curMenu);
+			treeObj.hover(function () {
+				if (!treeObj.hasClass("showIcon")) {
+					treeObj.addClass("showIcon");
+				}
+			}, function() {
+				treeObj.removeClass("showIcon");
+			});
+			*/
+    });
+
+
+    $(function () {
+        $('input.title-input').on('blur', function () {
+            $.form.load('{:url("save")}', {name: this.name, value: this.value}, 'POST', function (ret) {
+                return false;
+            });
+        });
+        $('input.check-box').on('click', function () {
+            $.form.load('{:url("save")}', {name: this.name, value: this.checked ? 1 : 0}, 'POST', function (ret) {
+                return false;
+            });
+        });
+    });
+</script>
+{/if}
+{/block}

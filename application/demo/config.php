@@ -15,8 +15,6 @@ use think\Env;
 
 return [
 
-	'url_common_param'=>true,
-
 	'db_gsj' => [
 		// 数据库类型
 		'type'        => 'mysql',
