@@ -2,11 +2,6 @@
 namespace app\admin\controller\lrj;
 
 use controller\BasicAdmin;
-use service\DataService;
-use service\NodeService;
-use service\ToolsService;
-use think\Db;
-use think\View;
 
 class Index extends BasicAdmin
 {

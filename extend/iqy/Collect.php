@@ -1,8 +1,6 @@
 <?php
 namespace iqy;
 
-use CURLFile;
-
 class Collect
 {
 	
